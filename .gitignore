@@ -11,10 +11,7 @@ __pycache__/
 *.pyc
 *.pyo
 
-# Backups und Debug
-Gandalf_BACKUP_*.py
-Gandalf_backup_*.py
-Gandalf_Druck_Test.py
+# Debug
 debug_*.py
 debug_labels.pdf
 
