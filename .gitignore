@@ -1,0 +1,26 @@
+# Geheime Zugangsdaten – NIE hochladen!
+config_geheim.py
+
+# Persoenliche Daten / Arbeitsordner
+chrome_profile/
+PICKUP/
+logs/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Backups und Debug
+Gandalf_BACKUP_*.py
+Gandalf_backup_*.py
+Gandalf_Druck_Test.py
+debug_*.py
+debug_labels.pdf
+
+# Sonstiges
+*.pdf
+*.png
+.claude/
+Gandalf\[BETA\]/
+test_import.csv

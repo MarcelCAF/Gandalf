@@ -1,0 +1,7 @@
+pandas>=2.0
+openpyxl>=3.1
+watchdog>=3.0
+playwright>=1.40
+
+# Optional: nur nötig, wenn ihr wirklich .xls-Dateien einlesen müsst
+# xlrd>=2.0.1
