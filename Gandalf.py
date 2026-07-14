@@ -106,6 +106,7 @@ CONFIG = {
     # ZPL-Direktdruck (True = ZPL, False = alter Sumatra-Weg)
     "LABEL_VIA_ZPL": True,
     "LABEL_ZPL_PRINTER": "ZDesigner Cannabis 28",
+    "LABEL_PRINT_BW": False,       # False = BW-Dateien werden NICHT gedruckt
 
     # Abholer_DB (OrcaScan REST API)
     "ORCA_API_KEY": "",          # wird aus config_geheim.py geladen
@@ -706,6 +707,7 @@ def process_pickup_queue_merge(base_dir: Path, log_file: Path) -> tuple[Path | N
             log_write(log_file, f"Erkannt: {source} | ORCA-Zeilen: {len(orca_df)}")
 
             if len(orca_df) > 0:
+                orca_df["_quelle"] = source
                 all_parts.append(orca_df)
 
             archived_to = safe_move(file_path, paths["archive"])
@@ -1327,6 +1329,16 @@ def print_labels_zpl(orca_df, log_file: Path) -> None:
     if not printer_name:
         log_write(log_file, "[ZPL] LABEL_ZPL_PRINTER nicht konfiguriert – Druck übersprungen.", level="WARN")
         return
+
+    # BW-Zeilen herausfiltern wenn LABEL_PRINT_BW=False
+    if not CONFIG.get("LABEL_PRINT_BW", True) and "_quelle" in orca_df.columns:
+        bw_count = (orca_df["_quelle"] == "BW").sum()
+        if bw_count > 0:
+            log_write(log_file, f"[ZPL] {bw_count} BW-Etikett(en) übersprungen (LABEL_PRINT_BW=False).")
+        orca_df = orca_df[orca_df["_quelle"] != "BW"]
+        if orca_df.empty:
+            log_write(log_file, "[ZPL] Keine Etiketten zum Drucken (nur BW).")
+            return
 
     log_write(log_file, f"[ZPL] Drucke {len(orca_df)} Etikett(en) an '{printer_name}'...")
     printed = 0
